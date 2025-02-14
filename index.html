@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Responsive Navigation with Submenu</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+        }
+        nav {
+            background: transparent;
+            color: black;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            left: 0;
+            z-index: 1100;
+           
+        }
+        .logo img {
+            height: 80px;
+        }
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        #nav-links {
+            display: none;
+        }
+        .mobile-btn {
+            display: block;
+            font-size: 24px;
+            cursor: pointer;
+            background: none;
+            border: none;
+            color: black;
+        }
+        .sidenav {
+            height: 100%;
+            width: 0;
+            position: fixed;
+            top: 0;
+            right: 0; /* Move to the right side */
+            background-color: white;
+            overflow-x: hidden;
+            transition: width 0.4s ease-in-out;
+            padding-top: 60px;
+            box-shadow: -2px 0 10px rgba(0, 0, 0, 0.2); /* Shadow on the left */
+            overflow-y: auto;
+            z-index: 1100;
+        }
+        .sidenav a {
+            padding: 15px 20px;
+            text-decoration: none;
+            font-size: 18px;
+            color: black;
+            display: block;
+            transition: background 0.3s ease;
+        }
+        .sidenav a:hover {
+            background: #ddd;
+        }
+        .closebtn {
+            position: absolute;
+            top: 10px;
+            left: 25px; /* Adjusted to left inside sidenav */
+            font-size: 36px;
+            cursor: pointer;
+        }
+        .submenu {
+            display: none;
+            background: #f9f9f9;
+            padding-left: 20px;
+        }
+        .submenu a {
+            font-size: 18px;
+            padding: 10px 20px;
+        }
+        .has-submenu {
+            cursor: pointer;
+        }
+        .image-overlay {
+    position: absolute;
+    right: 10px; /* Adjust spacing from the right */
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px; /* Spacing between images */
+    z-index: 10;
+    margin-top: 30px;
+}
+
+.image-overlay img {
+    width: 180px; /* Adjust size as needed */
+    animation: fadeInUp 1s ease-in-out;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+.image-container {
+    display: flex;
+    justify-content: center; /* Centers images horizontally */
+    align-items: center; /* Aligns images vertically */
+    gap: 10px; /* Adjust space between images */
+}
+
+
+
+    </style>
+    <script>
+        function openNav() {
+            document.getElementById("mySidenav").style.width = "250px";
+            setTimeout(() => {
+                document.addEventListener("click", closeNavOutside);
+            }, 100);
+        }
+
+        function closeNav() {
+            document.getElementById("mySidenav").style.width = "0";
+            document.removeEventListener("click", closeNavOutside);
+        }
+
+        function closeNavOutside(event) {
+            let sidebar = document.getElementById("mySidenav");
+            let button = document.querySelector(".mobile-btn");
+            if (!sidebar.contains(event.target) && event.target !== button) {
+                closeNav();
+            }
+        }
+
+        function toggleSubmenu(id) {
+    // Close all submenus first
+    document.querySelectorAll(".submenu").forEach(submenu => {
+        if (submenu.id !== id) {
+            submenu.style.display = "none";
+        }
+    });
+
+    // Toggle the selected submenu
+    let submenu = document.getElementById(id);
+    submenu.style.display = (submenu.style.display === "block") ? "none" : "block";
+}
+
+    </script>
+</head>
+<body>
+    <nav role="navigation">
+        <div class="logo">
+            <a href="index.php"><img src="./images/logo-dark.gif" alt="PCCOE&R Logo"></a>
+        </div>
+        <div class="nav-right">
+            <a href="telephone.html">
+                <img src="./images/contactus.gif" alt="Contact Us" style="height: 65px;">
+            </a>
+            <button class="mobile-btn" aria-label="Open menu" onclick="openNav()">
+                <img src="./images/menubar.gif" alt="Menu" style="height: 55px;">
+            </button>
+        </div>
+    </nav>
+    
+    <div id="mySidenav" class="sidenav" role="menu">
+        <a class="closebtn" aria-label="Close menu" onclick="closeNav()">&times;</a>
+        <a href="index.html">Home</a>
+        <a href="about.html">About Us</a>
+        <a href="contact.html">Contact Us</a>
+        <a class="has-submenu" onclick="toggleSubmenu('steel-submenu')">Steel Sector &#x25BC;</a>
+        <div id="steel-submenu" class="submenu">
+            <a href="#">Steel Overview</a>
+            <a href="#">Steel Reports</a>
+        </div>
+        <a href="#">Acts/Notifications</a>
+        <a class="has-submenu" onclick="toggleSubmenu('technical-submenu')">Technical Wing &#x25BC;</a>
+        <div id="technical-submenu" class="submenu">
+            <a href="#">Technical Research</a>
+            <a href="#">Development Programs</a>
+        </div>
+        <a href="#">Imp Links</a>
+        <a href="#">Rajbhasha</a>
+        <a class="has-submenu" onclick="toggleSubmenu('docs-submenu')">Documentation &#x25BC;</a>
+        <div id="docs-submenu" class="submenu">
+            <a href="#">Guidelines</a>
+            <a href="#">Regulations</a>
+        </div>
+    </div>
+    <main id="main">
+
+        <div class="bg-video-wrapper">
+            <video class="bg-video" preload="auto" autoplay loop muted playsinline data-object-fit="cover">
+                <source src="https://fadsan.co.in/steel/assets/videos/steel.mp4" type="video/mp4">
+                <source src="https://fadsan.co.in/steel/assets/videos/steel.mp4" type="video/webm">
+            </video>
+            <!-- Image Overlay Container -->
+            <div class="image-overlay">
+             <img src="images/modi.png" alt="Modi" class="overlay-img modi" style="margin-top: 20px;">
+             <div class="image-container">
+                <img src="images/central.png" alt="Central" class="overlay-img central">
+                <img src="images/mos.png" alt="MOS" class="overlay-img mos">
+             </div>
+            </div>
+        </div>
+        
+        
+         <script src="js/jquery.min.js"></script>
+					<script src="js/jquery.easing.1.3.js"></script>
+					<script src="js/bootstrap.bundle.min.js"></script>
+					<script src="js/SmoothScroll.js"></script>
+					<script src="js/jquery.scrollTo.min.js"></script>
+					<script src="js/jquery.localScroll.min.js"></script>
+					<script src="js/jquery.viewport.mini.js"></script>
+					<script src="js/jquery.parallax-1.1.3.js"></script>
+					<script src="js/jquery.fitvids.js"></script>
+					<script src="js/owl.carousel.min.js"></script>
+					<script src="js/isotope.pkgd.min.js"></script>
+					<script src="js/imagesloaded.pkgd.min.js"></script>
+					<script src="js/jquery.magnific-popup.min.js"></script>
+					<script src="js/masonry.pkgd.min.js"></script>
+					<script src="js/jquery.lazyload.min.js"></script>
+					<script src="js/wow.min.js"></script>
+					<script src="js/morphext.js"></script>
+					<script src="js/typed.min.js"></script>
+					<script src="js/all.js"></script>
+					<script src="js/contact-form.js"></script>
+					<script src="js/jquery.ajaxchimp.min.js"></script>
+					<script src="js/objectFitPolyfill.min.js"></script>
+					<script src="js/splitting.min.js"></script>
+					<!-- Jquery Library File -->
+					<script src="assets/js/jquery-3.7.1.min.js"></script>
+					<!-- Bootstrap js file -->
+					<script src="assets/js/bootstrap.min.js"></script>
+					<!-- Validator js file -->
+					<script src="assets/js/validator.min.js"></script>
+					<!-- SlickNav js file -->
+					<script src="assets/js/jquery.slicknav.js"></script>
+					<!-- Swiper js file -->
+					<script src="assets/js/swiper-bundle.min.js"></script>
+					<!-- Counter js file -->
+					<script src="assets/js/jquery.waypoints.min.js"></script>
+					<script src="assets/js/jquery.counterup.min.js"></script>
+					<!-- Isotop js file -->
+					<script src="assets/js/isotope.min.js"></script>
+					<!-- Magnific js file -->
+					<script src="assets/js/jquery.magnific-popup.min.js"></script>
+					<!-- SmoothScroll -->
+					<script src="assets/js/SmoothScroll.js"></script>
+					<!-- Parallax js -->
+					<script src="assets/js/parallaxie.js"></script>
+					<!-- MagicCursor js file -->
+					<script src="assets/js/gsap.min.js"></script>
+					<script src="assets/js/magiccursor.js"></script>
+					<!-- Text Effect js file -->
+					<script src="assets/js/SplitText.js"></script>
+					<script src="assets/js/ScrollTrigger.min.js"></script>
+					<!-- YTPlayer js File -->
+					<script src="assets/js/jquery.mb.YTPlayer.min.js"></script>
+					<!-- Wow js file -->
+					<script src="assets/js/wow.js"></script>
+					<!-- Main Custom js file -->
+					<script src="assets/js/function.js"></script>
+
+					<script src="assets1/js/vendor/jquery-2.1.4.min.js"></script>
+					<script src="assets1/js/vendor/google-fonts.js"></script>
+					<script src="assets1/js/vendor/jquery.easing.js"></script>
+					<script src="assets1/js/vendor/jquery.waypoints.min.js"></script>
+					<script src="assets1/js/vendor/bootstrap.min.js"></script>
+					<script src="assets1/js/vendor/bootstrap-hover-dropdown.min.js"></script>
+					<script src="assets1/js/vendor/smoothscroll.js"></script>
+					<script src="assets1/js/vendor/jquery.localScroll.min.js"></script>
+					<script src="assets1/js/vendor/jquery.scrollTo.min.js"></script>
+					<script src="assets1/js/vendor/jquery.stellar.min.js"></script>
+					<script src="assets1/js/vendor/jquery.parallax.js"></script>
+					<script src="assets1/js/vendor/slick.min.js"></script>
+					<script src="assets1/js/vendor/jquery.easypiechart.min.js"></script>
+					<script src="assets1/js/vendor/countup.min.js"></script>
+					<script src="assets1/js/vendor/isotope.min.js"></script>
+					<script src="assets1/js/vendor/jquery.magnific-popup.min.js"></script>
+					<script src="assets1/js/vendor/wow.min.js"></script>
+					<script src="assets1/js/vendor/jquery.mb.YTPlayer.min.js"></script>
+					<script src="assets1/js/vendor/jquery.ajaxchimp.js"></script>
+					<script src="./script.js"></script>
+            
+</body>
+</html>
